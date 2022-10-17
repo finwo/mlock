@@ -1,17 +1,21 @@
-const queue  = {};
-const active = {};
+const queue: {[index:string|symbol]:(()=>void)[]}  = {};
+const active: {[index:string|symbol]:boolean} = {};
 
-function trigger() {
+function trigger(): void {
   Object.entries(queue).forEach(([name, q]) => {
     if (active[name]) return;
     if (!q.length) return;
     active[name] = true;
     const fn = q.shift();
+    if (!fn) {
+      delete active[name];
+      return;
+    }
     fn();
   });
 }
 
-export function lock(name) {
+export function lock(name: string | symbol): Promise<void> {
   return new Promise(resolve => {
     queue[name] = queue[name] || [];
     queue[name].push(resolve);
@@ -19,7 +23,7 @@ export function lock(name) {
   });
 }
 
-export function unlock(name) {
+export function unlock(name: string | symbol): void {
   delete active[name];
   trigger();
 }
