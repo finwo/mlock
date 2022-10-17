@@ -1,6 +1,6 @@
 {
   "name": "nlock",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Basic thread-wide named locking",
   "main": "./lib/cjs/index.js",
   "types": "./lib/cjs/index.d.ts",
